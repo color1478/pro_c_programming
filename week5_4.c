@@ -4,7 +4,10 @@
 #pragma warning(disable:4996)
 
 void ro_num(num);
-void appendchar(char** result, char roman, int* strLen);
+int appendchar(char** result, char roman);
+int resultLen = 0;
+int resultSize = 20;
+
 
 void main()
 {
@@ -24,9 +27,6 @@ void ro_num(int num)
 	int arabic[] = { 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 }; //숫자 1차원
 	char* roman[] = { "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" }; //문자 2차원 배열(포인터 배열)
 	char* result = (char*)malloc(sizeof(char) * 20); //결과 값 배열 문자 1차원 배열 (포인터 배열)
-
-	int resultLen = 0;
-	
 	
 	for (int i = 0; num > 0; i++)
 	{
@@ -35,7 +35,7 @@ void ro_num(int num)
 			num -= arabic[i];
 			for (int j = 0; roman[i][j] != '\0'; j++) 
 			{
-				appendchar(&result, roman[i][j], &resultLen);
+				appendchar(&result, roman[i][j]);
 			}
 		}
 	}
@@ -45,13 +45,14 @@ void ro_num(int num)
 	free(result);
 }
 
-void appendchar(char **result, char roman, int* strLen)
+int appendchar(char **result, char roman)
 {
-	int resultSize = 20;
-	if (*strLen + 1 >= resultSize)
+	if (resultLen + 1 >= resultSize)
 	{
 		*result = (char*)realloc(*result, (resultSize)*2);
 	}
-	(*result)[(*strLen)++] = roman;
-	(*result)[*strLen] = '\0';
+	(*result)[resultLen++] = roman;
+	(*result)[resultLen] = '\0';
+
+	return resultLen;
 }
